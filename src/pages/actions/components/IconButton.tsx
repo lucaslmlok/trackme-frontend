@@ -1,38 +1,89 @@
-import { Box, createStyles, Fab, makeStyles, Theme } from "@material-ui/core";
-import React from "react";
-import CheckIcon from "@material-ui/icons/Check";
+import { Box, makeStyles, Icon, Button } from "@material-ui/core";
 import * as colors from "@material-ui/core/colors";
 
-type Props = {
-  color?: string;
+import { Color } from "../../../redux/redux";
+import { shades } from "../../../utils/theme";
+
+type StyleProps = {
+  color: string;
+  active: boolean;
 };
 
 const useStyles = makeStyles({
-  colorButton: {
-    padding: 6,
+  wrapper: {
+    width: "100%",
+    paddingBottom: "100%",
+    position: "relative",
   },
-  fab: {
-    backgroundColor: ({ color }: any) => colors[color][300],
-    "&:hover, &:focus": {
-      backgroundColor: ({ color }: any) => colors[color][500],
+  innerWrapper: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  buttonRoot: {
+    position: "relative",
+    width: "100%",
+    minWidth: 0,
+    height: "100%",
+    borderWidth: 4,
+    borderStyle: "solid",
+    borderRadius: "50%",
+    borderColor: ({ color }: StyleProps) => colors[color][shades.actionDark],
+    backgroundColor: ({ color }: StyleProps) => colors[color][shades.actionBg],
+    "&:hover": {
+      backgroundColor: ({ color }: StyleProps) =>
+        colors[color][shades.actionBg],
+      borderColor: ({ color }: StyleProps) =>
+        colors[color][shades.actionBorder],
     },
   },
   icon: {
-    color: "white",
+    color: ({ color }: StyleProps) => colors[color][shades.actionBorder],
+    fontSize: 30,
+  },
+  checkIcon: {
+    display: ({ active }: StyleProps) => (active ? "block" : "none"),
+    position: "absolute",
+    zIndex: 1,
+    right: -10,
+    bottom: -10,
+    width: 24,
+    height: 24,
+    borderRadius: "50%",
+    borderWidth: 3,
+    borderStyle: "solid",
+    borderColor: "white",
+    backgroundColor: colors.green["A700"],
   },
 });
 
-const ColorButton = (props: Props) => {
-  const { color } = props;
-  const classes = useStyles({ color: "green" });
+type Props = {
+  icon: string;
+  color: Color;
+  selected?: string;
+  onSelect?: Function;
+};
+
+const IconButton = ({ icon, color, selected, onSelect }: Props) => {
+  const active = icon === selected;
+  const classes = useStyles({ color, active });
+
+  const onClick = () => {
+    if (!active && !!onSelect) onSelect(icon);
+  };
 
   return (
-    <Box className={classes.colorButton}>
-      <Fab size="small" classes={{ root: classes.fab }}>
-        <CheckIcon className={classes.icon} />
-      </Fab>
+    <Box className={classes.wrapper}>
+      <Box className={classes.innerWrapper}>
+        <Button classes={{ root: classes.buttonRoot }} onClick={onClick}>
+          <Icon className={classes.icon}>{icon}</Icon>
+          <Box className={classes.checkIcon} />
+        </Button>
+      </Box>
     </Box>
   );
 };
 
-export default ColorButton;
+export default IconButton;

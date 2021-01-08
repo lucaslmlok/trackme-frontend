@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import AuthPage from "./pages/auth/AuthPage";
-import NavWrapper from "./containers/NavWrapper";
-import TrackingPage from "./pages/tracking/Page";
+import NavWrapper from "./components/nav/NavWrapper";
+import TrackingPage from "./pages/tracking/TrackingPage";
 import ActionPage from "./pages/actions/ActionPage";
 import DashboardPage from "./pages/DashboardPage";
 import AccountPage from "./pages/AccountPage";
 
 import * as authActions from "./redux/actions/auth";
-import { State } from "./redux/store.d";
-import Loading from "./components/Loading";
+import { State } from "./redux/redux";
+import Loading from "./components/ui/Loading";
 
 const GuardedRoute = ({ children, auth, redirect, ...rest }) => (
   <Route

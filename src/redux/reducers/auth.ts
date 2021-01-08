@@ -1,4 +1,4 @@
-import { AuthState } from "../store.d";
+import { AuthState } from "../redux";
 import * as actionTypes from "../actionTypes";
 
 const initialState: AuthState = {

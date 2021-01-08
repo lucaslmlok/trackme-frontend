@@ -1,13 +1,24 @@
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@material-ui/core";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import PersonIcon from "@material-ui/icons/Person";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import ListAltIcon from "@material-ui/icons/ListAlt";
-import { useHistory } from "react-router-dom";
+
+import * as authActions from "../../redux/actions/auth";
 
 export const MainListItems = ({ currentPage, onClick }) => {
   const history = useHistory();
@@ -56,20 +67,40 @@ export const MainListItems = ({ currentPage, onClick }) => {
 
 export const SecondaryListItems = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const [logoutDialog, setLogoutDialog] = useState(false);
 
   const logout = () => {
+    dispatch(authActions.authOut());
     history.push("/");
   };
 
   return (
     <div>
-      {/* <ListSubheader inset>Saved reports</ListSubheader> */}
-      <ListItem button onClick={logout}>
+      <ListItem button onClick={() => setLogoutDialog(true)}>
         <ListItemIcon>
           <ExitToAppIcon />
         </ListItemIcon>
         <ListItemText primary="Log Out" />
       </ListItem>
+
+      <Dialog open={logoutDialog} onClose={() => setLogoutDialog(false)}>
+        <DialogTitle>Log Out</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLogoutDialog(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={logout} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { Box, Typography, Link } from "@material-ui/core";
 
-import config from "../utils/config";
+import config from "../../utils/config";
 
 const Copyright = () => {
   return (

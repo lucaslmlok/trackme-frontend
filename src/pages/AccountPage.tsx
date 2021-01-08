@@ -13,7 +13,7 @@ import {
   useTheme,
 } from "@material-ui/core";
 import React from "react";
-import Title from "../components/Title";
+import Title from "../components/ui/Title";
 
 const useStyles = makeStyles((theme) => ({
   paper: {

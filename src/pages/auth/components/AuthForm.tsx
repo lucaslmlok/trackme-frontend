@@ -14,14 +14,18 @@ import {
   Box,
   Grid,
   Typography,
+  Link,
+  IconButton,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
-import ToastMsg from "../../../components/ToastMsg";
-import Copyright from "../../../components/Copyright";
+import ToastMsg from "../../../components/ui/ToastMsg";
+import Copyright from "../../../components/ui/Copyright";
 import { errorText, getErrorData } from "../../../utils/helper";
 import * as authActions from "../../../redux/actions/auth";
+import config from "../../../utils/config";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -89,14 +93,15 @@ const AuthForm = () => {
 
   return (
     <div className={classes.paper}>
-      <Box display="flex" width={1} justifyContent="flex-end" mb={3}>
-        <Button
-          variant="contained"
-          color={isLogin ? "primary" : "secondary"}
-          onClick={toggleMode}
-        >
+      <Box display="flex" width={1} justifyContent="space-between" mb={2}>
+        <Button color={isLogin ? "primary" : "secondary"} onClick={toggleMode}>
           Switch to {isLogin ? "Sign Up" : "Log In"}
         </Button>
+        <Link href={config.githubRepo} target="_blank" rel="noopener">
+          <IconButton>
+            <GitHubIcon color="primary" style={{ fontSize: 30 }} />
+          </IconButton>
+        </Link>
       </Box>
       <Avatar
         className={classes.avatar}

@@ -1,7 +1,7 @@
 import { Box, Typography, makeStyles } from "@material-ui/core";
 
 import useMobile from "../../../hooks/useMobile";
-import AppIcon from "../../../components/AppIcon";
+import AppIcon from "../../../components/ui/AppIcon";
 
 const useStyles = makeStyles(() => ({
   banner: {

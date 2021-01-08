@@ -22,7 +22,7 @@ import { deepOrange } from "@material-ui/core/colors";
 import Chart from "../components/temp/Chart";
 import Deposits from "../components/temp/Deposits";
 import Orders from "../components/temp/Orders";
-import AppIcon from "../components/AppIcon";
+import AppIcon from "../components/ui/AppIcon";
 
 const drawerWidth = 240;
 

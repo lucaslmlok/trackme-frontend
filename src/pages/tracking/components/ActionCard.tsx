@@ -14,7 +14,7 @@ import UndoIcon from "@material-ui/icons/Undo";
 import Popover from "@material-ui/core/Popover";
 import * as colors from "@material-ui/core/colors";
 
-import ProgressBar from "../../../components/ProgressBar";
+import ProgressBar from "../../../components/ui/ProgressBar";
 import Icon from "@material-ui/core/Icon";
 import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
@@ -23,7 +23,7 @@ type Props = {
   type?: "yesNo" | "number";
   target?: number;
   unit?: string;
-  defaultIncrement?: number;
+  increment?: number;
   done?: number;
   color?: string;
   icon?: string;
