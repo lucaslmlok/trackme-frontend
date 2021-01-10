@@ -7,6 +7,7 @@ export default {
   githubRepo: "https://github.com/lucaslmlok/trackme-frontend",
   apiPath: "http://localhost:5000",
   drawerWidth: 240,
+  dateFormat: "yyyy-MM-DD",
 };
 
 export const ActionTypes = {

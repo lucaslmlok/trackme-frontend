@@ -31,6 +31,7 @@ import moment from "moment";
 import MomentUtils from "@date-io/moment";
 import { toast } from "react-toastify";
 
+import config from "../../../utils/config";
 import { Colors, Icons, Weekdays, ActionTypes } from "../../../utils/config";
 import { errorText, getErrorData, timeout } from "../../../utils/helper";
 import { Action, State, Weekday } from "../../../redux/redux";
@@ -153,8 +154,8 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
     newAction.type = actionType;
     newAction.color = actionColor;
     newAction.icon = actionIcon;
-    newAction.startDate = startDate.format("yyyy-MM-DD");
-    newAction.endDate = endDate ? endDate.format("yyyy-MM-DD") : null;
+    newAction.startDate = startDate.format(config.dateFormat);
+    newAction.endDate = endDate ? endDate.format(config.dateFormat) : null;
     newAction.weekdays = actionWeekdays;
 
     if (newAction.type === "yesNo") {

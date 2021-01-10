@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ButtonBase,
   Box,
@@ -7,12 +7,19 @@ import {
   Typography,
   Button,
   useMediaQuery,
+  makeStyles,
 } from "@material-ui/core";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import CheckIcon from "@material-ui/icons/CheckCircle";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import moment from "moment";
 import MomentUtils from "@date-io/moment";
+import * as colors from "@material-ui/core/colors";
+
+import config from "../../../utils/config";
+import { State } from "../../../redux/redux";
+import * as trackingActions from "../../../redux/actions/tracking";
 
 const useStyles = makeStyles((theme) => ({
   calendar: {
@@ -28,19 +35,34 @@ const useStyles = makeStyles((theme) => ({
     width: 120,
     padding: 4,
   },
+  todayBtn: {
+    position: "absolute",
+    zIndex: 1,
+    top: -50,
+    right: 0,
+  },
+  done: {
+    position: "absolute",
+    zindex: 1,
+    right: 4,
+    top: 45,
+    color: colors.green[400],
+    fontSize: 30,
+  },
 }));
 
 type DateButtonProps = {
-  date: moment.Moment;
   diff: number;
   onClick: Function;
 };
 
-const DateButton = (props: DateButtonProps) => {
-  const { date, diff, onClick } = props;
+const DateButton = ({ diff, onClick }: DateButtonProps) => {
   const classes = useStyles();
+  const { date, recordList } = useSelector((state: State) => state.tracking);
 
-  const myDate = moment(date).add(diff, "days");
+  const momentDate = moment(date, config.dateFormat);
+  const myDate = momentDate.add(diff, "days");
+
   const textColor = diff ? "rgba(255, 255, 255, 0.54)" : "white";
   const fontSize = 18 * (diff ? 0.8 : 1);
   const mainFontSize = 40 * (diff ? 0.8 : 1);
@@ -48,6 +70,15 @@ const DateButton = (props: DateButtonProps) => {
 
   const showMonth = !diff || !myDate.isSame(date, "month");
   const showYear = !diff || !myDate.isSame(date, "year");
+
+  const allDone = useMemo(() => {
+    return (
+      recordList.length &&
+      recordList.every((record) => {
+        return record.done >= record.target;
+      })
+    );
+  }, [recordList]);
 
   return (
     <Box
@@ -58,6 +89,7 @@ const DateButton = (props: DateButtonProps) => {
     >
       <ButtonBase onClick={() => onClick()}>
         <Box
+          position="relative"
           flexGrow={1}
           display="flex"
           flexDirection="column"
@@ -82,25 +114,41 @@ const DateButton = (props: DateButtonProps) => {
           >
             {myDate.format("MMM")} {showYear && myDate.format("yyyy")}
           </Typography>
+          {diff === 0 && allDone ? (
+            <CheckIcon className={classes.done} />
+          ) : null}
         </Box>
       </ButtonBase>
     </Box>
   );
 };
 
-const ActionCalendar = () => {
+const TrackCalendar = () => {
   const desktop = useMediaQuery("(min-width:600px)");
   const classes = useStyles();
-  const today = moment().startOf("day");
-  const [date, setDate] = useState(moment(today));
+  const dispatch = useDispatch();
+  const { date } = useSelector((state: State) => state.tracking);
   const [isOpen, setIsOpen] = useState(false);
 
+  const isToday = useMemo(() => {
+    return (
+      Math.abs(
+        moment(date).startOf("day").diff(moment().startOf("day"), "day")
+      ) < 1
+    );
+  }, [date]);
+
+  const setDate = (newDate: moment.Moment) => {
+    dispatch(trackingActions.setDate(newDate.format(config.dateFormat)));
+  };
+
   const addDate = (diff: number) => {
-    setDate((prev) => moment(prev).add(diff, "days"));
+    const newDate = moment(date, config.dateFormat).add(diff, "days");
+    setDate(newDate);
   };
 
   return (
-    <Box>
+    <Box position="relative">
       <Box
         display="flex"
         alignItems="center"
@@ -115,13 +163,9 @@ const ActionCalendar = () => {
           />
         </IconButton>
         <Box flexGrow={1} display="flex" justifyContent="space-evenly">
-          {desktop && (
-            <DateButton date={date} diff={-1} onClick={() => addDate(-1)} />
-          )}
-          <DateButton date={date} diff={0} onClick={() => setIsOpen(true)} />
-          {desktop && (
-            <DateButton date={date} diff={1} onClick={() => addDate(1)} />
-          )}
+          {desktop && <DateButton diff={-1} onClick={() => addDate(-1)} />}
+          <DateButton diff={0} onClick={() => setIsOpen(true)} />
+          {desktop && <DateButton diff={1} onClick={() => addDate(1)} />}
         </Box>
         <IconButton onClick={() => addDate(1)}>
           <NavigateNextIcon
@@ -143,17 +187,15 @@ const ActionCalendar = () => {
           />
         </MuiPickersUtilsProvider>
       </Box>
-      <Box display="flex" justifyContent="flex-end" p={1} pb={0}>
-        <Button
-          color="primary"
-          onClick={() => setDate(moment(today))}
-          disabled={Math.abs(date.diff(today, "day")) < 1}
-        >
-          Go To Today
-        </Button>
-      </Box>
+      {!isToday && (
+        <Box className={classes.todayBtn}>
+          <Button color="primary" onClick={() => setDate(moment())}>
+            Go To Today
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
 
-export default ActionCalendar;
+export default TrackCalendar;

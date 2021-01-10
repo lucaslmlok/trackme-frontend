@@ -35,6 +35,11 @@ export type Action = {
   weekdays: Weekday[];
 };
 
+export interface Record extends Action {
+  done: number;
+  date: string;
+}
+
 export interface AuthState {
   tokenCheck: boolean;
   token: string;
@@ -45,7 +50,15 @@ export interface ActionState {
   actionList: Action[];
 }
 
+export interface TrackingState {
+  date: string;
+  recordList: Record[];
+  recordLoading: boolean;
+  recordError: boolean;
+}
+
 export interface State {
   auth: AuthState;
   action: ActionState;
+  tracking: TrackingState;
 }

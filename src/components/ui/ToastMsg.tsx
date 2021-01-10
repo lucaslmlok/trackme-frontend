@@ -19,7 +19,9 @@ const ToastMsg = ({ title, body }: Props) => {
 
   return (
     <Box p={1}>
-      <Typography className={classes.title}>{title}</Typography>
+      <Typography className={classes.title}>
+        {title || "Something went wrong."}
+      </Typography>
       <Typography className={classes.body}>{body}</Typography>
     </Box>
   );

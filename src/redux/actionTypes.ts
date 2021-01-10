@@ -3,3 +3,8 @@ export const AUTH_IN = "AUTH_IN";
 export const AUTH_OUT = "AUTH_OUT";
 
 export const UPDATE_ACTION_LIST = "UPDATE_ACTION_LIST";
+
+export const SET_DATE = "SET_DATE";
+export const RECORD_LIST_LOADING = "RECORD_LIST_LOADING";
+export const UPDATE_RECORD_LIST = "UPDATE_RECORD_LIST";
+export const RECORD_LIST_ERROR = "RECORD_LIST_ERROR";

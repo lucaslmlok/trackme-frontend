@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Box,
@@ -71,6 +72,7 @@ const DeleteDialog = ({ isOpen, onClose, onConfirm }: DeleteProps) => {
 const ActionPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const query = new URLSearchParams(useLocation().search);
 
   const [formOpen, setFormOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string>(null);
@@ -121,7 +123,12 @@ const ActionPage = () => {
   };
 
   useEffect(() => {
-    dispatch(actionActions.fetchActionList());
+    (async () => {
+      await dispatch(actionActions.fetchActionList());
+      const type = query.get("type");
+      const actionId = query.get("actionId");
+      type === "form" && openForm(actionId);
+    })();
   }, []);
 
   return (

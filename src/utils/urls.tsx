@@ -7,4 +7,5 @@ export default {
   login: apiPath + "/user/login",
   tokenLogin: apiPath + "/user/token-login",
   action: apiPath + "/action",
+  actionRecord: apiPath + "/action-record",
 };

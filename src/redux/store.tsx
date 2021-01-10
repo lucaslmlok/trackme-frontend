@@ -3,10 +3,12 @@ import thunk from "redux-thunk";
 
 import authReducer from "./reducers/auth";
 import actionReducer from "./reducers/action";
+import trackingReducer from "./reducers/tracking";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   action: actionReducer,
+  tracking: trackingReducer,
 });
 
 const middleware = [thunk];

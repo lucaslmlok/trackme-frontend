@@ -1,9 +1,12 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Fab, Box, Paper, makeStyles } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-import ActionCalendar from "./components/ActionCalendar";
-import ActionList from "./components/ActionList";
+import TrackCalendar from "./components/TrackCalendar";
+import TrackingList from "./components/TrackingList";
+import * as trackingActions from "../../redux/actions/tracking";
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -17,10 +20,15 @@ const useStyles = makeStyles((theme) => ({
 const TrackingPage = () => {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const addAction = () => {
-    history.push("/actions?type=add");
+    history.push("/actions?type=form");
   };
+
+  useEffect(() => {
+    dispatch(trackingActions.fetchRecords());
+  }, []);
 
   return (
     <>
@@ -32,10 +40,10 @@ const TrackingPage = () => {
       >
         <AddIcon />
       </Fab>
-      <Box overflow="hidden" borderRadius={4}>
+      <Box borderRadius={4}>
         <Paper elevation={0}>
-          <ActionCalendar />
-          <ActionList />
+          <TrackCalendar />
+          <TrackingList />
         </Paper>
       </Box>
     </>
