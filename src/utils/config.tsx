@@ -5,7 +5,7 @@ export default {
   githubName: "lucaslmlok",
   githubProfile: "https://github.com/lucaslmlok",
   githubRepo: "https://github.com/lucaslmlok/trackme-frontend",
-  apiPath: "http://localhost:5000",
+  apiPath: "https://lucas-trackme.herokuapp.com",
   drawerWidth: 240,
   dateFormat: "yyyy-MM-DD",
 };

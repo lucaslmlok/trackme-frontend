@@ -2,6 +2,8 @@ export const TOKEN_CHECK = "TOKEN_CHECK";
 export const AUTH_IN = "AUTH_IN";
 export const AUTH_OUT = "AUTH_OUT";
 
+export const ACTION_LIST_LOADING = "ACTION_LIST_LOADING";
+export const ACTION_LIST_FINISH = "ACTION_LIST_FINISH";
 export const UPDATE_ACTION_LIST = "UPDATE_ACTION_LIST";
 
 export const SET_DATE = "SET_DATE";

@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Helmet } from "react-helmet";
 
 import "./index.css";
 import App from "./App";
@@ -16,6 +17,13 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
+        <Helmet>
+          <title>Trackme - Track Your Life Seamlessly.</title>
+          <meta
+            name="description"
+            content="A productivity tools helps people monitor their and do their best work by being effective."
+          />
+        </Helmet>
         <App />
         <ToastContainer position="bottom-right" />
       </ThemeProvider>

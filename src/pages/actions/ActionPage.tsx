@@ -44,11 +44,12 @@ const useStyles = makeStyles((theme) => ({
 
 type DeleteProps = {
   isOpen: boolean;
+  loading: boolean;
   onClose: Function;
   onConfirm: Function;
 };
 
-const DeleteDialog = ({ isOpen, onClose, onConfirm }: DeleteProps) => {
+const DeleteDialog = ({ isOpen, loading, onClose, onConfirm }: DeleteProps) => {
   return (
     <Dialog open={isOpen} onClose={() => onClose()}>
       <DialogTitle>Delete Action(s)</DialogTitle>
@@ -58,11 +59,16 @@ const DeleteDialog = ({ isOpen, onClose, onConfirm }: DeleteProps) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose()} color="secondary">
+        <Button onClick={() => onClose()} color="secondary" disabled={loading}>
           Cancel
         </Button>
-        <Button onClick={() => onConfirm()} color="primary" autoFocus>
-          OK
+        <Button
+          onClick={() => onConfirm()}
+          color="primary"
+          autoFocus
+          disabled={loading}
+        >
+          {loading ? "Loading" : "OK"}
         </Button>
       </DialogActions>
     </Dialog>
@@ -79,6 +85,8 @@ const ActionPage = () => {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [deleteSelected, setDeleteSelected] = useState<string>(null);
   const [deleteList, setDeleteList] = useState<string[]>([]);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const toggleCheckbox = (actionId: string) => {
     const newDeleteList = [...deleteList];
@@ -102,6 +110,8 @@ const ActionPage = () => {
   };
 
   const onDeleteConfirm = async () => {
+    setDeleteLoading(true);
+
     const actionIds = deleteSelected ? [deleteSelected] : deleteList;
     const result: any = await dispatch(actionActions.deleteActions(actionIds));
     if (result.error) {
@@ -120,6 +130,7 @@ const ActionPage = () => {
       await timeout();
       setDeleteDialog(false);
     }
+    setDeleteLoading(false);
   };
 
   useEffect(() => {
@@ -163,6 +174,7 @@ const ActionPage = () => {
       </Fab>
       <DeleteDialog
         isOpen={deleteDialog}
+        loading={deleteLoading}
         onClose={() => setDeleteDialog(false)}
         onConfirm={() => onDeleteConfirm()}
       />

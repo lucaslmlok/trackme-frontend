@@ -48,12 +48,12 @@ export const MainListItems = ({ currentPage, onClick }) => {
         <ListItemText primary="Actions" />
       </ListItem>
 
-      <ListItem button onClick={() => navigate("/dashboard")}>
+      {/* <ListItem button onClick={() => navigate("/dashboard")}>
         <ListItemIcon>
           <EqualizerIcon color={pageColor("Dashboard")} />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
-      </ListItem>
+      </ListItem> */}
 
       <ListItem button onClick={() => navigate("/account")}>
         <ListItemIcon>

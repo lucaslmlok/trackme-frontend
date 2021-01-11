@@ -125,6 +125,8 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
   const [endDate, setEndDate] = useState(defaultValues.endDate);
   const [actionWeekdays, setActionWeekdays] = useState(defaultValues.weekdays);
 
+  const [loading, setLoading] = useState(false);
+
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(getSchema(actionType)),
   });
@@ -150,6 +152,8 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
   };
 
   const onSubmit = async (data) => {
+    setLoading(true);
+
     const newAction: Action = _.cloneDeep(data);
     newAction.type = actionType;
     newAction.color = actionColor;
@@ -175,6 +179,7 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
       await timeout();
       onClose();
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -206,7 +211,12 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
               <Typography variant="h6" className={classes.title}>
                 {`${!!action ? "Edit" : "Add"} Action`}
               </Typography>
-              <Button autoFocus color="inherit" type="submit">
+              <Button
+                autoFocus
+                color="inherit"
+                type="submit"
+                disabled={loading}
+              >
                 Save
               </Button>
             </Toolbar>
@@ -385,8 +395,9 @@ const ActionForm = ({ isOpen, selectedId, onClose }: Props) => {
                   type="submit"
                   fullWidth
                   color="primary"
+                  disabled={loading}
                 >
-                  Save
+                  {loading ? "Loading" : "Save"}
                 </Button>
               </Grid>
             </Grid>

@@ -48,6 +48,7 @@ export interface AuthState {
 
 export interface ActionState {
   actionList: Action[];
+  actionListLoading: boolean;
 }
 
 export interface TrackingState {

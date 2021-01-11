@@ -17,6 +17,7 @@ import {
   ListItemText,
   LinearProgress,
   makeStyles,
+  CircularProgress,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import * as colors from "@material-ui/core/colors";
@@ -97,6 +98,7 @@ const ActionCard = ({ record }: Props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const progress = getProgress(target, done);
+  const [loading, setLoading] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleMore = (e: any) => setAnchorEl(e.currentTarget);
@@ -104,8 +106,10 @@ const ActionCard = ({ record }: Props) => {
   const open = Boolean(anchorEl);
   const popoverId = open ? "simple-popover" : undefined;
 
-  const doneHandler = (type = "done") => {
-    dispatch(trackingActions.doneRecord(id, type));
+  const doneHandler = async (type = "done") => {
+    setLoading(true);
+    await dispatch(trackingActions.doneRecord(id, type));
+    setLoading(false);
   };
 
   const editAction = () => {
@@ -171,21 +175,34 @@ const ActionCard = ({ record }: Props) => {
           alignItems="center"
           width={1}
         >
-          {isDone ? (
+          {!loading && isDone && (
             <Typography className={classes.completed}>Completed</Typography>
-          ) : (
+          )}
+          {(loading || !isDone) && (
             <Button
               variant="contained"
               style={{
                 color: "white",
-                backgroundColor: isDone
+                backgroundColor: loading
                   ? colors.grey[300]
                   : colors[color][shades.actionBorder],
               }}
-              disabled={isDone}
+              disabled={loading}
               onClick={() => doneHandler()}
             >
-              <Box fontWeight="fontWeightBold">Done</Box>
+              <Box
+                fontWeight="fontWeightBold"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height={24}
+              >
+                {loading ? (
+                  <CircularProgress size={15} style={{ color: "#aaa" }} />
+                ) : (
+                  "Done"
+                )}
+              </Box>
             </Button>
           )}
           <IconButton
@@ -213,16 +230,28 @@ const ActionCard = ({ record }: Props) => {
           >
             <List component="nav" aria-label="main mailbox folders">
               {done < target && (
-                <ListItem button onClick={() => doneHandler("done-all")}>
+                <ListItem
+                  button
+                  disabled={loading}
+                  onClick={() => doneHandler("done-all")}
+                >
                   <ListItemText primary="Done All" />
                 </ListItem>
               )}
               {done > 0 && (
                 <>
-                  <ListItem button onClick={() => doneHandler("undo")}>
+                  <ListItem
+                    button
+                    disabled={loading}
+                    onClick={() => doneHandler("undo")}
+                  >
                     <ListItemText primary="Undo" />
                   </ListItem>
-                  <ListItem button onClick={() => doneHandler("undo-all")}>
+                  <ListItem
+                    button
+                    disabled={loading}
+                    onClick={() => doneHandler("undo-all")}
+                  >
                     <ListItemText primary="Undo All" />
                   </ListItem>
                 </>

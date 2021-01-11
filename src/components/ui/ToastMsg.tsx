@@ -7,7 +7,7 @@ type Props = {
 
 const useStyle = makeStyles(() => ({
   title: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },

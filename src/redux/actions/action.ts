@@ -10,6 +10,7 @@ import * as actionTypes from "../actionTypes";
 
 export const fetchActionList = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
+    dispatch({ type: actionTypes.ACTION_LIST_LOADING });
     try {
       const { data } = await axios.get(urls.action, {
         headers: authHeaders(getState()),
@@ -20,6 +21,7 @@ export const fetchActionList = () => {
         type: actionTypes.UPDATE_ACTION_LIST,
         payload: { actionList },
       });
+      dispatch({ type: actionTypes.ACTION_LIST_FINISH });
     } catch (error) {
       return error.response.data;
     }
